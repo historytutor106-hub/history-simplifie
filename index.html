@@ -48,7 +48,7 @@ if ('serviceWorker' in navigator) {
 
 <div class="item">
 <b>Enter Class Room</b>
-<p class="small">Teacher ke diye hue room code se class join karein.</p>
+<p class="small">join with room code .</p>
 <input id="roomCode" placeholder="Room Code">
 <input id="studentName" placeholder="Your Name">
 <button class="btn" onclick="joinClass()">Join Class</button>
@@ -81,7 +81,7 @@ if ('serviceWorker' in navigator) {
 <label>Content / Description</label><textarea id="body" placeholder="Apna content yahan likho..."></textarea>
 <label>For MCQ: correct answer (optional)</label><input id="answer" placeholder="e.g. R. Shamasastry">
 <button class="btn" onclick="saveContent()">Save Content</button></div>
-<div class="notice">Note: Ye abhi local prototype hai. Real app mein students ke phone par content bhejne ke liye online database/admin panel connect karna hoga.</div></section>
+<div class="notice">.</div></section>
 <div id="radhaCounter" style="text-align:center;background:#fff8ed;padding:22px;border-radius:20px;margin:15px 0;">
   <div style="font-size:24px;">🙏 राधा राधा 🙏</div>
   <p style="font-size:18px;">मन लगाकर पढ़ें और प्रेम से नाम स्मरण करें</p>
@@ -155,7 +155,29 @@ function toggleCamera(){
   const track = localStream.getVideoTracks()[0];
   if(track) track.enabled = !track.enabled;
 }
+async function shareScreen(){
+  if(!localStream){
+    alert("Pehle class join kijiye.");
+    return;
+  }
 
+  try{
+    const screenStream = await navigator.mediaDevices.getDisplayMedia({
+      video: true
+    });
+
+    const screenTrack = screenStream.getVideoTracks()[0];
+
+    document.getElementById('localVideo').srcObject = screenStream;
+
+    screenTrack.onended = function(){
+      document.getElementById('localVideo').srcObject = localStream;
+    };
+
+  }catch(error){
+    console.log("Screen sharing cancelled:", error);
+  }
+}
 function leaveClass(){
   if(localStream){
     localStream.getTracks().forEach(track => track.stop());
