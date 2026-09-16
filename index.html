@@ -39,7 +39,32 @@ if ('serviceWorker' in navigator) {
 
 <section id="notes" class="page"><button class="back" onclick="show('home')">← Home</button><div class="top"><h2>Notes</h2><button class="btn" onclick="show('admin')">＋ Add</button></div><div id="notesList"></div></section>
 
-<section id="classes" class="page"><button class="back" onclick="show('home')">← Home</button><div class="top"><h2>Classes</h2><button class="btn" onclick="show('admin')">＋ Add</button></div><div id="classesList"></div></section>
+<section id="classes" class="page">
+<button class="back" onclick="show('home')">← Home</button>
+<div class="top">
+<h2>🎥 Live Classes</h2>
+<p>Join your History class</p>
+</div>
+
+<div class="item">
+<b>Enter Class Room</b>
+<p class="small">Teacher ke diye hue room code se class join karein.</p>
+<input id="roomCode" placeholder="Room Code">
+<input id="studentName" placeholder="Your Name">
+<button class="btn" onclick="joinClass()">Join Class</button>
+</div>
+
+<div id="classRoom" class="item" style="display:none">
+<h3 id="classTitle">Live Class</h3>
+<video id="localVideo" autoplay playsinline muted style="width:100%;border-radius:15px;"></video>
+<div>
+<button class="btn" onclick="toggleMic()">🎤 Mic</button>
+<button class="btn" onclick="toggleCamera()">📷 Camera</button>
+<button class="btn" onclick="leaveClass()">🚪 Leave</button>
+</div>
+<div id="participants"></div>
+</div>
+</section>
 
 <section id="quiz" class="page"><button class="back" onclick="show('home')">← Home</button><div class="top"><h2>MCQ & Quiz</h2><button class="btn" onclick="show('admin')">＋ Add</button></div><div id="quizList"></div></section>
 
@@ -94,7 +119,52 @@ classesList.innerHTML=data.classes.map(x=>`<div class=item><b>▶️ ${esc(x.tit
 quizList.innerHTML=data.mcq.map((x,i)=>`<div class=quiz><b>Q. ${esc(x.title)}</b><button class=option onclick="this.parentElement.querySelector('.answer').textContent='Answer: ${esc(x.answer||x.body)}'">Show Answer</button><div class=answer></div></div>`).join('');
 updatesList.innerHTML=data.update.map(x=>`<div class=item><b>📢 ${esc(x.title)}</b><div class=small>${esc(x.body)}</div></div>`).join('');
 }
-function saveContent(){let type=document.getElementById('type').value,t=document.getElementById('title').value.trim(),b=document.getElementById('body').value.trim(),a=document.getElementById('answer').value.trim();if(!t||!b){alert('Title aur content dono bharo.');return}data[type].push({title:t,body:b,answer:a});persist();render();alert('Content saved!');document.getElementById('title').value='';document.getElementById('body').value='';document.getElementById('answer').value='';show(type==='note'?'notes':type==='class'?'classes':type==='mcq'?'quiz':'updates')}
+let localStream = null;
+
+async function joinClass(){
+  const name = document.getElementById('studentName').value.trim();
+  const room = document.getElementById('roomCode').value.trim();
+
+  if(!name || !room){
+    alert('Please enter your name and room code.');
+    return;
+  }
+
+  try{
+    localStream = await navigator.mediaDevices.getUserMedia({
+      video:true,
+      audio:true
+    });
+
+    document.getElementById('localVideo').srcObject = localStream;
+    document.getElementById('classRoom').style.display = 'block';
+  }catch(error){
+    alert('Camera/Microphone permission is required.');
+  }
+}
+
+function toggleMic(){
+  if(!localStream) return;
+  const track = localStream.getAudioTracks()[0];
+  if(track) track.enabled = !track.enabled;
+}
+
+function toggleCamera(){
+  if(!localStream) return;
+  const track = localStream.getVideoTracks()[0];
+  if(track) track.enabled = !track.enabled;
+}
+
+function leaveClass(){
+  if(localStream){
+    localStream.getTracks().forEach(track => track.stop());
+    localStream = null;
+  }
+
+  document.getElementById('localVideo').srcObject = null;
+  document.getElementById('classRoom').style.display = 'none';
+  }
+  function saveContent(){let type=document.getElementById('type').value,t=document.getElementById('title').value.trim(),b=document.getElementById('body').value.trim(),a=document.getElementById('answer').value.trim();if(!t||!b){alert('Title aur content dono bharo.');return}data[type].push({title:t,body:b,answer:a});persist();render();alert('Content saved!');document.getElementById('title').value='';document.getElementById('body').value='';document.getElementById('answer').value='';show(type==='note'?'notes':type==='class'?'classes':type==='mcq'?'quiz':'updates')}
 function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');render();scrollTo(0,0)}
 render();
   loadRadha();
