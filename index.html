@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>History Simplifie</title>
+<style>
+:root{--bg:#f5eee3;--card:#fffaf2;--ink:#2b251f;--muted:#75695d;--a:#a24e48;--line:#e2d5c6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,sans-serif}.app{max-width:440px;margin:auto;min-height:100vh;padding-bottom:82px}
+header{padding:18px 18px 10px;display:flex;justify-content:space-between;align-items:center}.brand{font:26px Georgia}.tag{font-size:11px;color:var(--muted);margin-top:3px}
+.page{display:none;padding:0 18px}.page.active{display:block}.hero{padding:24px;margin:12px 0 15px;border-radius:22px;background:#e9dbc8}.hero h1{font:34px Georgia;margin:0 0 8px}.hero p{color:var(--muted);font-size:17px;line-height:1.5}.quote{padding:18px;margin-bottom:18px;border-radius:17px;background:#eee1d3;text-align:center;font:18px Georgia;color:#6e5144}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tile{min-height:105px;border:0;border-radius:18px;background:var(--card);font-size:13px;padding:10px;cursor:pointer;color:var(--ink)}.tile span{display:block;font-size:27px;margin-bottom:9px}
+h2{font:29px Georgia}.back{border:0;background:none;padding:8px 0;font-size:15px}.item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;margin:10px 0;cursor:pointer}.small{font-size:12px;color:var(--muted);margin-top:5px}.top{display:flex;justify-content:space-between;gap:10px}.btn{border:0;background:var(--a);color:white;border-radius:11px;padding:10px 14px;cursor:pointer}.btn.secondary{background:#dfd2c3;color:var(--ink)}input,textarea,select{width:100%;padding:12px;margin:6px 0 10px;border:1px solid var(--line);border-radius:11px;background:#fffdf8;font:14px Arial}textarea{min-height:120px}.form{background:var(--card);padding:16px;border-radius:18px;margin:12px 0}label{font-size:13px;font-weight:bold}.notice{padding:12px;background:#f0e4d7;border-radius:12px;color:var(--muted);font-size:13px}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(440px,100%);display:flex;justify-content:space-around;background:#fffaf5;border-top:1px solid var(--line);padding:10px 4px;z-index:4}nav button{border:0;background:none;color:var(--muted);font-size:12px}nav b{display:block;font-size:21px;margin-bottom:2px}
+.quiz{background:var(--card);padding:17px;border-radius:17px;margin:12px 0}.option{width:100%;text-align:left;padding:12px;margin:5px 0;border:1px solid var(--line);border-radius:11px;background:#fffdf8}.answer{font-weight:bold;margin-top:10px}
+</style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#a24e48">
+<link rel="icon" href="icon-192.svg">
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+}
+</script>
+</head>
+<body><div class="app">
+<header><div><div class="brand">History Simplifie</div><div class="tag">Learn • Understand • Grow</div></div><div>🔔</div></header>
+
+<section id="home" class="page active"><div class="hero"><h1>Hello, Learner! 📚</h1><p>Small steps today, big dreams tomorrow.</p></div><div class="quote">“The more you know your history, the more prepared you are for the future.”</div>
+<div class="grid">
+<button class="tile" onclick="show('net')"><span>🎓</span>UGC NET<br>History</button><button class="tile" onclick="show('basics')"><span>📖</span>History<br>Basics</button><button class="tile" onclick="show('notes')"><span>📝</span>Notes</button>
+<button class="tile" onclick="show('classes')"><span>▶️</span>Classes</button><button class="tile" onclick="show('quiz')"><span>❓</span>MCQ & Quiz</button><button class="tile" onclick="show('updates')"><span>📰</span>Updates</button>
+<button class="tile" onclick="show('tests')"><span>📊</span>Test Series</button><button class="tile" onclick="show('plan')"><span>📅</span>Study Plan</button><button class="tile" onclick="show('profile')"><span>👤</span>Profile</button></div></section>
+
+<section id="net" class="page"><button class="back" onclick="show('home')">← Home</button><h2>UGC NET History</h2>
+<div class="item" onclick="alert('Add your syllabus PDF/content from Admin.')">📚 Syllabus & Exam Pattern<div class="small">Unit-wise syllabus and strategy</div></div>
+<div class="item" onclick="alert('PYQs section is ready for your questions.')">📝 Previous Year Papers<div class="small">Add PYQs and solutions</div></div>
+<div class="item" onclick="show('quiz')">❓ Topic-wise MCQs<div class="small">Practice questions</div></div></section>
+
+<section id="basics" class="page"><button class="back" onclick="show('home')">← Home</button><h2>History Basics</h2>
+<div class="item">🏺 Ancient India<div class="small">Harappan, Vedic, Mahajanapadas, Mauryas...</div></div><div class="item">🏰 Medieval India<div class="small">Sultanate, Mughals and regional states</div></div><div class="item">🇮🇳 Modern India<div class="small">Colonialism and nationalism</div></div><div class="item">🌍 World History<div class="small">Major events and themes</div></div></section>
+
+<section id="notes" class="page"><button class="back" onclick="show('home')">← Home</button><div class="top"><h2>Notes</h2><button class="btn" onclick="show('admin')">＋ Add</button></div><div id="notesList"></div></section>
+
+<section id="classes" class="page"><button class="back" onclick="show('home')">← Home</button><div class="top"><h2>Classes</h2><button class="btn" onclick="show('admin')">＋ Add</button></div><div id="classesList"></div></section>
+
+<section id="quiz" class="page"><button class="back" onclick="show('home')">← Home</button><div class="top"><h2>MCQ & Quiz</h2><button class="btn" onclick="show('admin')">＋ Add</button></div><div id="quizList"></div></section>
+
+<section id="updates" class="page"><button class="back" onclick="show('home')">← Home</button><h2>Updates</h2><div id="updatesList"></div></section>
+<section id="tests" class="page"><button class="back" onclick="show('home')">← Home</button><h2>Test Series</h2><div class="notice">You can add tests later. This prototype is ready for the question bank.</div></section>
+<section id="plan" class="page"><button class="back" onclick="show('home')">← Home</button><h2>Study Plan</h2><div class="item">📅 Today<div class="small">Historiography + 20 MCQs + revision</div></div></section>
+<section id="profile" class="page"><button class="back" onclick="show('home')">← Home</button><h2>Profile</h2><div class="item">👩‍🎓 Learner<div class="small">History Simplifie student profile</div></div></section>
+
+<section id="admin" class="page"><button class="back" onclick="show('home')">← Home</button><h2>Add Content</h2>
+<div class="notice">Ab tum yahan se prototype mein apne notes, classes aur MCQs add kar sakti ho. Data isi browser mein save rahega.</div>
+<div class="form"><label>Content type</label><select id="type"><option value="note">Note</option><option value="class">Class / Video</option><option value="mcq">MCQ</option><option value="update">Update</option></select>
+<label>Title</label><input id="title" placeholder="e.g. Mauryan Administration">
+<label>Content / Description</label><textarea id="body" placeholder="Apna content yahan likho..."></textarea>
+<label>For MCQ: correct answer (optional)</label><input id="answer" placeholder="e.g. R. Shamasastry">
+<button class="btn" onclick="saveContent()">Save Content</button></div>
+<div class="notice">Note: Ye abhi local prototype hai. Real app mein students ke phone par content bhejne ke liye online database/admin panel connect karna hoga.</div></section>
+
+<nav><button onclick="show('home')"><b>⌂</b>Home</button><button onclick="show('net')"><b>⌕</b>Explore</button><button onclick="show('notes')"><b>⇩</b>Notes</button><button onclick="show('profile')"><b>♙</b>Profile</button></nav>
+</div>
+<script>
+const key='hs_content_v2';
+let data=JSON.parse(localStorage.getItem(key)||'null')||{
+notes:[{title:'Introduction to Historiography',body:'Sample note: Historiography is the study of how history is written and interpreted.'}],
+classes:[{title:'Introduction to Historiography',body:'Sample class description • Add your YouTube/video link in the description.'}],
+mcq:[{title:'Who discovered the Arthashastra manuscript?',body:'R. Shamasastry',answer:'R. Shamasastry'}],
+update:[{title:'Welcome to History Simplifie',body:'Your study platform is ready. Add your own content from Add Content.'}]
+};
+function persist(){localStorage.setItem(key,JSON.stringify(data))}
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+notesList.innerHTML=data.notes.map(x=>`<div class=item><b>${esc(x.title)}</b><div class=small>${esc(x.body)}</div></div>`).join('');
+classesList.innerHTML=data.classes.map(x=>`<div class=item><b>▶️ ${esc(x.title)}</b><div class=small>${esc(x.body)}</div></div>`).join('');
+quizList.innerHTML=data.mcq.map((x,i)=>`<div class=quiz><b>Q. ${esc(x.title)}</b><button class=option onclick="this.parentElement.querySelector('.answer').textContent='Answer: ${esc(x.answer||x.body)}'">Show Answer</button><div class=answer></div></div>`).join('');
+updatesList.innerHTML=data.update.map(x=>`<div class=item><b>📢 ${esc(x.title)}</b><div class=small>${esc(x.body)}</div></div>`).join('');
+}
+function saveContent(){let type=document.getElementById('type').value,t=document.getElementById('title').value.trim(),b=document.getElementById('body').value.trim(),a=document.getElementById('answer').value.trim();if(!t||!b){alert('Title aur content dono bharo.');return}data[type].push({title:t,body:b,answer:a});persist();render();alert('Content saved!');document.getElementById('title').value='';document.getElementById('body').value='';document.getElementById('answer').value='';show(type==='note'?'notes':type==='class'?'classes':type==='mcq'?'quiz':'updates')}
+function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');render();scrollTo(0,0)}
+render();
+</script></body></html>
