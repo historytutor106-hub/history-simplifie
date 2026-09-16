@@ -28,7 +28,13 @@ if ('serviceWorker' in navigator) {
 <button class="tile" onclick="show('net')"><span>🎓</span>UGC NET<br>History</button><button class="tile" onclick="show('basics')"><span>📖</span>History<br>Basics</button><button class="tile" onclick="show('notes')"><span>📝</span>Notes</button>
 <button class="tile" onclick="show('classes')"><span>▶️</span>Classes</button><button class="tile" onclick="show('quiz')"><span>❓</span>MCQ & Quiz</button><button class="tile" onclick="show('updates')"><span>📰</span>Updates</button>
 <button class="tile" onclick="show('tests')"><span>📊</span>Test Series</button><button class="tile" onclick="show('plan')"><span>📅</span>Study Plan</button><button class="tile" onclick="show('profile')"><span>👤</span>Profile</button></div></section>
-
+<div class="item" style="margin:15px 0;">
+  <h3>👩‍🏫 Teacher Login</h3>
+  <input id="teacherEmail" type="email" placeholder="Teacher Email">
+  <input id="teacherPassword" type="password" placeholder="Password">
+  <button class="btn" onclick="teacherLogin()">Login</button>
+  <p id="loginMessage" class="small"></p>
+</div>
 <section id="net" class="page"><button class="back" onclick="show('home')">← Home</button><h2>UGC NET History</h2>
 <div class="item" onclick="alert('Add your syllabus PDF/content from Admin.')">📚 Syllabus & Exam Pattern<div class="small">Unit-wise syllabus and strategy</div></div>
 <div class="item" onclick="alert('PYQs section is ready for your questions.')">📝 Previous Year Papers<div class="small">Add PYQs and solutions</div></div>
@@ -194,7 +200,7 @@ render();
 </script>.   
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getAuthsignwithEmailandPassword} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -212,6 +218,26 @@ render();
   const app = initializeApp(firebaseConfig);
     
   const auth = getAuth(app);
-  const db = getFirestore(app);
+   const db = getFirestore(app);
+    window.teacherLogin = async function(){
+  const email = document.getElementById('teacherEmail').value.trim();
+  const password = document.getElementById('teacherPassword').value;
+
+  const message = document.getElementById('loginMessage');
+
+  if(!email || !password){
+    message.textContent = "Email aur password bhariye.";
+    return;
+  }
+
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+    message.textContent = "✅ Teacher login successful!";
+  }catch(error){
+    message.textContent = "❌ Email ya password galat hai.";
+  }
+};
+    window.firebaseAuth = auth;
+window.firebaseDb = db;
   </script>
 </body></html>
