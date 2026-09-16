@@ -156,6 +156,28 @@ function toggleCamera(){
   if(track) track.enabled = !track.enabled;
 }
 async function shareScreen(){
+  alert("Share Screen button working!");
+  
+  if(!localStream){
+    alert("Pehle class join kijiye.");
+    return;
+  }
+
+  try{
+    const screenStream = await navigator.mediaDevices.getDisplayMedia({
+      video: true
+    });
+
+    const screenTrack = screenStream.getVideoTracks()[0];
+
+    document.getElementById('localVideo').srcObject = screenStream;
+
+    screenTrack.onended = function(){
+      document.getElementById('localVideo').srcObject = localStream;
+    };
+
+  }catch(error){
+    console.log("Screen sharing cancelled:"
   if(!localStream){
     alert("Pehle class join kijiye.");
     return;
