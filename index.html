@@ -78,4 +78,5 @@ updatesList.innerHTML=data.update.map(x=>`<div class=item><b>📢 ${esc(x.title)
 function saveContent(){let type=document.getElementById('type').value,t=document.getElementById('title').value.trim(),b=document.getElementById('body').value.trim(),a=document.getElementById('answer').value.trim();if(!t||!b){alert('Title aur content dono bharo.');return}data[type].push({title:t,body:b,answer:a});persist();render();alert('Content saved!');document.getElementById('title').value='';document.getElementById('body').value='';document.getElementById('answer').value='';show(type==='note'?'notes':type==='class'?'classes':type==='mcq'?'quiz':'updates')}
 function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');render();scrollTo(0,0)}
 render();
-</script></body></html>
+</script>.           
+</body></html>
