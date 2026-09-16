@@ -56,7 +56,16 @@ if ('serviceWorker' in navigator) {
 <label>For MCQ: correct answer (optional)</label><input id="answer" placeholder="e.g. R. Shamasastry">
 <button class="btn" onclick="saveContent()">Save Content</button></div>
 <div class="notice">Note: Ye abhi local prototype hai. Real app mein students ke phone par content bhejne ke liye online database/admin panel connect karna hoga.</div></section>
-
+<div id="radhaCounter" style="text-align:center;background:#fff8ed;padding:22px;border-radius:20px;margin:15px 0;">
+  <div style="font-size:24px;">🙏 राधा राधा 🙏</div>
+  <p style="font-size:18px;">मन लगाकर पढ़ें और प्रेम से नाम स्मरण करें</p>
+  <button onclick="countRadha()" style="font-size:22px;padding:14px 28px;border:0;border-radius:15px;background:#f3dfc8;">
+    🙏 राधा राधा
+  </button>
+  <div style="margin-top:12px;font-size:20px;">
+    आज का count: <b id="radhaCount">0</b>
+  </div>
+</div>
 <nav><button onclick="show('home')"><b>⌂</b>Home</button><button onclick="show('net')"><b>⌕</b>Explore</button><button onclick="show('notes')"><b>⇩</b>Notes</button><button onclick="show('profile')"><b>♙</b>Profile</button></nav>
 </div>
 <script>
@@ -66,7 +75,17 @@ notes:[{title:'Introduction to Historiography',body:'Sample note: Historiography
 classes:[{title:'Introduction to Historiography',body:'Sample class description • Add your YouTube/video link in the description.'}],
 mcq:[{title:'Who discovered the Arthashastra manuscript?',body:'R. Shamasastry',answer:'R. Shamasastry'}],
 update:[{title:'Welcome to History Simplifie',body:'Your study platform is ready. Add your own content from Add Content.'}]
-};
+}; 
+  function countRadha(){
+  let count = Number(localStorage.getItem('radha_count') || 0) + 1;
+  localStorage.setItem('radha_count', count);
+  document.getElementById('radhaCount').textContent = count;
+}
+
+function loadRadha(){
+  let count = Number(localStorage.getItem('radha_count') || 0);
+  document.getElementById('radhaCount').textContent = count;
+}
 function persist(){localStorage.setItem(key,JSON.stringify(data))}
 function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function render(){
@@ -78,5 +97,6 @@ updatesList.innerHTML=data.update.map(x=>`<div class=item><b>📢 ${esc(x.title)
 function saveContent(){let type=document.getElementById('type').value,t=document.getElementById('title').value.trim(),b=document.getElementById('body').value.trim(),a=document.getElementById('answer').value.trim();if(!t||!b){alert('Title aur content dono bharo.');return}data[type].push({title:t,body:b,answer:a});persist();render();alert('Content saved!');document.getElementById('title').value='';document.getElementById('body').value='';document.getElementById('answer').value='';show(type==='note'?'notes':type==='class'?'classes':type==='mcq'?'quiz':'updates')}
 function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');render();scrollTo(0,0)}
 render();
+  loadRadha();
 </script>.           
 </body></html>
